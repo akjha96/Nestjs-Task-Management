@@ -1,3 +1,4 @@
+import { Task } from './task.entity';
 import {
   Body,
   Controller,
@@ -26,10 +27,10 @@ export class TasksController {
   //   }
   // }
 
-  // @Get('/:id')
-  // getTaskByTaskId(@Param('id') id: string): Task {
-  //   return this.tasksService.getTaskByTaskId(id);
-  // }
+  @Get('/:id')
+  getTaskByTaskId(@Param('id') id: string): Promise<Task> {
+    return this.tasksService.getTaskByTaskId(id);
+  }
 
   // @Post()
   // createTask(@Body() createTaskDto: CreateTaskDto): Task {
