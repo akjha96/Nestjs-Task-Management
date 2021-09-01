@@ -1,6 +1,6 @@
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { Injectable } from '@nestjs/common';
-import { TaskStatus } from './tasks.enum';
+import { TaskStatus } from './task-status.enum';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { NotFoundException } from '@nestjs/common';
 import { TaskRepository } from './task.repository';
@@ -45,26 +45,21 @@ export class TasksService {
     return found;
   };
 
-  // createTask = (createTaskDto: CreateTaskDto): Task => {
-  //   const { title, description } = createTaskDto;
-  //   const task: Task = {
-  //     id: uuid(),
-  //     title,
-  //     description,
-  //     status: TaskStatus.DONE,
-  //   };
-  //   this.tasks.push(task);
-  //   return task;
-  // };
-  // deleteTaskByTaskId = (id: string) => {
-  //   const found = this.getTaskByTaskId(id);
-  //   const updatedTask = this.tasks.filter((task) => task.id !== found.id);
-  //   this.tasks = updatedTask;
-  //   return 'Task Deleted Successfully';
-  // };
-  // updateTaskStatusById = (id: string, status: TaskStatus) => {
-  //   const task = this.getTaskByTaskId(id);
-  //   task.status = status;
-  //   return task;
-  // };
+  createTask = (createTaskDto: CreateTaskDto): Promise<Task> => {
+    return this.taskReository.createTask(createTaskDto);
+  };
+
+  deleteTaskByTaskId = (id: string): Promise<string> => {
+    return this.taskReository.deleteTaskByTaskId(id);
+  };
+
+  updateTaskStatusById = async (
+    id: string,
+    status: TaskStatus,
+  ): Promise<Task> => {
+    const task = await this.getTaskByTaskId(id);
+    task.status = status;
+    this.taskReository.save(task);
+    return task;
+  };
 }
